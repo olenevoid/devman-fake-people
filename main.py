@@ -19,8 +19,6 @@ SKILLS_LIST = [
     'Огненный заряд'
 ]
 
-RUNIC_SKILLS = []
-
 RUNIC_LETTERS = {
     'а': 'а͠',
     'б': 'б̋',
@@ -116,13 +114,13 @@ def get_random_stats(min: int = 3, max: int = 18) -> dict:
     return stats
 
 
-def get_random_skills() -> dict:
+def get_random_skills(runic_skills: list) -> dict:
     skills = {
         'skill_1': '',
         'skill_2': '',
         'skill_3': ''
         }
-    skills_sample = random.sample(RUNIC_SKILLS, 3)
+    skills_sample = random.sample(runic_skills, 3)
     for key, _ in skills.items():
         skills[key] = skills_sample.pop()
     return skills
@@ -136,16 +134,18 @@ def get_runic_text(text: str) -> str:
 
 
 def main():
+    runic_skills = []
+
     makedirs(CHARSHEET_FOLDER_NAME, exist_ok=True)
 
     for skill in SKILLS_LIST:
-        RUNIC_SKILLS.append(get_runic_text(skill))
+        runic_skills.append(get_runic_text(skill))
 
     for _ in range(0, 10, 1):
         character = {
             **get_random_person(),
             **get_random_stats(),
-            **get_random_skills()
+            **get_random_skills(runic_skills)
             }
         filename = f'{character["last_name"]}_{character["first_name"]}.svg'
         file_path = path.join(CHARSHEET_FOLDER_NAME, filename)
